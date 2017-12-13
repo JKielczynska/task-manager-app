@@ -18,6 +18,6 @@ public class DbService {
     }
 
     public Task getTaskById(final Long id) {
-        return repository.findById(id).orElseThrow(() -> new NullPointerException("Task " + id + "not found"));
+        return repository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
     }
 }
