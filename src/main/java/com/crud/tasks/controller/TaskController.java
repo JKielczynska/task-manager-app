@@ -1,5 +1,7 @@
 package com.crud.tasks.controller;
 
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+
 import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
@@ -32,17 +34,17 @@ public class TaskController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "{taskId}")
-    public void deleteTask(@PathVariable final String taskId) {
-
+    public void deleteTask(@PathVariable final Long taskId) {
+        service.deleteTask(taskId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "{taskId}")
+    @RequestMapping(method = RequestMethod.PUT, value = "{taskId}", consumes = APPLICATION_JSON_VALUE)
     public TaskDto updateTask(@RequestBody final TaskDto taskDto) {
-        return new TaskDto((long)1, "Edited test title", "Test content");
+        return taskMapper.mapToTaskDto(service.saveTask(taskMapper.mapToTask(taskDto)));
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
     public void createTask(@RequestBody final TaskDto taskDto) {
-        System.out.println(taskDto);
+        service.saveTask(taskMapper.mapToTask(taskDto));
     }
 }
