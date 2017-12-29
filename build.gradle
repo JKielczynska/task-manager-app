@@ -21,7 +21,7 @@ allprojects {
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'checkstyle'
-    apply plugin: 'war'
+    //apply plugin: 'war'
 
 	checkstyle {
 		configFile = rootProject.file('config/checkstyle/checkstyle.xml')
@@ -43,8 +43,9 @@ allprojects {
 		testCompile('org.springframework.boot:spring-boot-starter-test')
         compile('org.projectlombok:lombok:1.16.18')
         compile('org.springframework.boot:spring-boot-starter-data-jpa')
-        compile('mysql:mysql-connector-java')
+        //compile('mysql:mysql-connector-java')
+		compile('org.postgresql:postgresql')
 
-		providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+		//providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	}
 }
