@@ -6,6 +6,7 @@ import com.crud.tasks.domain.TrelloCardDto;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +40,9 @@ public class TrelloClient {
     public List<TrelloBoardDto> getTrelloBoards() {
         TrelloBoardDto[] boardsResponse = restTemplate.getForObject(getTrelloBoardsUrl(), TrelloBoardDto[].class);
 
-        return Arrays.asList(Optional.ofNullable(boardsResponse)
-                .orElse(new TrelloBoardDto[]{}));
+        return Optional.ofNullable(boardsResponse)
+                .map(Arrays::asList)
+                .orElseGet(Collections::emptyList);
     }
 
     public CreatedTrelloCard createNewCard(TrelloCardDto trelloCardDto) {
