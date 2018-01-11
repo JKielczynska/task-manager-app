@@ -1,5 +1,7 @@
 package com.crud.tasks.trello.client;
 
+import static java.util.Optional.ofNullable;
+
 import com.crud.tasks.domain.CreatedTrelloCard;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
@@ -8,8 +10,8 @@ import com.crud.tasks.trello.config.TrelloConfig;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,20 +33,22 @@ public class TrelloClient {
         return UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/members/"  + trelloConfig.getTrelloUsername() + "/boards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
                 .queryParam("token", trelloConfig.getTrelloToken())
-                .queryParam("fields", "name, id")
+                .queryParam("fields", "name,id")
                 .queryParam("lists", "all").build().encode().toUri();
     }
     /**Implementation of sending a request to the Trello API.*/
     public List<TrelloBoardDto> getTrelloBoards() {
         try {
-            TrelloBoardDto[] boardsResponse = restTemplate.getForObject(getTrelloBoardsUrl(), TrelloBoardDto[].class);
-            return Arrays.asList(Optional.ofNullable(boardsResponse).orElse(new TrelloBoardDto[0]));
+            return ofNullable(restTemplate.getForObject(getTrelloBoardsUrl(), TrelloBoardDto[].class))
+                    .map(Arrays::asList)
+                    .orElseGet(Collections::emptyList);
         } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
             return new ArrayList<>();
         }
     }
 
+    /**Method that maps the creation of a new task in Trello.*/
     public CreatedTrelloCard createNewCard(TrelloCardDto trelloCardDto) {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
