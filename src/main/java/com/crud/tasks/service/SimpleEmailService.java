@@ -33,11 +33,11 @@ public class SimpleEmailService {
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
-        if (!mail.getToCc().isEmpty()) {
+        if (mail.getToCc().isEmpty()) {
+            LOGGER.info("CC is not included.");
+        } else {
             mailMessage.setCc(mail.getToCc());
             LOGGER.info("CC added.");
-        } else {
-            LOGGER.info("CC is not included.");
         }
         return mailMessage;
     }
