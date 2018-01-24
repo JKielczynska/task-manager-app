@@ -2,7 +2,7 @@ package com.crud.tasks.trello.client;
 
 import static java.util.Optional.ofNullable;
 
-import com.crud.tasks.domain.CreatedTrelloCard;
+import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.trello.config.TrelloConfig;
@@ -49,7 +49,7 @@ public class TrelloClient {
     }
 
     /**Method that maps the creation of a new task in Trello.*/
-    public CreatedTrelloCard createNewCard(final TrelloCardDto trelloCardDto) {
+    public CreatedTrelloCardDto createNewCard(final TrelloCardDto trelloCardDto) {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
                 .queryParam("token", trelloConfig.getTrelloToken())
@@ -59,6 +59,6 @@ public class TrelloClient {
                 .queryParam("idList", trelloCardDto.getListId())
                 .build().encode().toUri();
 
-        return restTemplate.postForObject(url, null, CreatedTrelloCard.class);
+        return restTemplate.postForObject(url, null, CreatedTrelloCardDto.class);
     }
 }
