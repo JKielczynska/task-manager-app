@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class TrelloValidator {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloValidator.class);
 
+    /**Logging whether the card name contains "test".*/
     public void validateCard(final TrelloCard trelloCard) {
         if (trelloCard.getName().contains("test")) {
             LOGGER.info("Someone is testing my application!");
@@ -23,6 +24,7 @@ public class TrelloValidator {
         }
     }
 
+    /**Filtering to tasks with "test" are not displayed in application.*/
     public List<TrelloBoard> validateTrelloBoards(final List<TrelloBoard> trelloBoards) {
         LOGGER.info("Starting filtering boards...");
         List<TrelloBoard> filteredBoards = trelloBoards.stream()
