@@ -6,6 +6,9 @@ import static org.mockito.Mockito.when;
 import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
+import com.crud.tasks.domain.badges.AttachmentsByType;
+import com.crud.tasks.domain.badges.Badges;
+import com.crud.tasks.domain.badges.Trello;
 import com.crud.tasks.trello.config.TrelloConfig;
 
 import java.net.URI;
@@ -69,7 +72,7 @@ public class TrelloClientTest {
                 "1",
                 "Test task",
                 "http://test.com",
-                null
+                new Badges(1, new AttachmentsByType(new Trello(1, 1)))
         );
         when(restTemplate.postForObject(uri, null, CreatedTrelloCardDto.class)).thenReturn(createdTrelloCardDto);
         //When
@@ -78,7 +81,9 @@ public class TrelloClientTest {
         assertEquals("1", newCard.getId());
         assertEquals("Test task", newCard.getName());
         assertEquals("http://test.com", newCard.getShortUrl());
-        assertEquals(null, newCard.getBadges());
+        assertEquals(1, newCard.getBadges().getVotes());
+        assertEquals(1, newCard.getBadges().getAttachmentsByType().getTrello().getBoard());
+        assertEquals(1, newCard.getBadges().getAttachmentsByType().getTrello().getCard());
     }
     @Test
     public void shouldReturnEmptyList() throws URISyntaxException {
