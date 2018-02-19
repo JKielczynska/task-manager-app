@@ -7,6 +7,7 @@ import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.Mail;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
+import com.crud.tasks.service.mail.MailCreatorService;
 import com.crud.tasks.trello.client.TrelloClient;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class TrelloService {
     private SimpleEmailService emailService;
     @Autowired
     private AdminConfig adminConfig;
+    @Autowired
+    private MailCreatorService mailCreatorService;
 
     private static final String SUBJECT = "Tasks: New Trello card";
 
@@ -33,7 +36,8 @@ public class TrelloService {
     public CreatedTrelloCardDto createTrelloCard(final TrelloCardDto trelloCardDto) {
         CreatedTrelloCardDto newCard = trelloClient.createNewCard(trelloCardDto);
         ofNullable(newCard).ifPresent(card -> emailService.send(new Mail(adminConfig.getAdminMail(), SUBJECT,
-                "New card: " + card.getName() + " has been created on your Trello account.", "")));
+                "New card: " + card.getName() + " has been created on your Trello account.", ""),
+                mailCreatorService));
         return newCard;
     }
 }

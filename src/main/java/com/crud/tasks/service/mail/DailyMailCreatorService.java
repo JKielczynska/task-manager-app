@@ -1,6 +1,7 @@
-package com.crud.tasks.service;
+package com.crud.tasks.service.mail;
 
 import com.crud.tasks.config.AdminConfig;
+import com.crud.tasks.repository.TaskRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,23 +10,27 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Service
-public class MailCreatorService {
+public class DailyMailCreatorService implements EmailCreator {
     @Autowired
     private AdminConfig adminConfig;
+    @Autowired
+    private TaskRepository taskRepository;
     @Autowired
     @Qualifier("templateEngine")
     private TemplateEngine templateEngine;
 
-    public String buildTrelloCardEmail(String message) {
+    public String buildEmailMessage(final String message) {
+
         Context context = new Context();
-        context.setVariable("preview", "New card has been created on your Trello account.");
+        context.setVariable("preview", "Daily information about the number of tasks.");
+        context.setVariable("task_count", taskRepository.count());
         context.setVariable("message", message);
         context.setVariable("tasks_url", "http://localhost:8888/tasks_frontend");
         context.setVariable("button", "Visit website");
-        context.setVariable("admin_name", adminConfig.getAdminName());
         context.setVariable("goodbye_message", "Have a nice day!");
-        context.setVariable("company_name", adminConfig.getCompanyName());
-        context.setVariable("company_address", adminConfig.getCompanyAddress());
-        return templateEngine.process("created-trello-card-mail", context);
+        context.setVariable("show_button", true);
+        context.setVariable("is_friend", false);
+        context.setVariable("admin_config", adminConfig);
+        return templateEngine.process("daily-mail", context);
     }
 }

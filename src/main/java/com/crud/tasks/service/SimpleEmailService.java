@@ -1,6 +1,8 @@
 package com.crud.tasks.service;
 
 import com.crud.tasks.domain.Mail;
+import com.crud.tasks.service.mail.EmailCreator;
+import com.crud.tasks.service.mail.MailCreatorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,22 +24,22 @@ public class SimpleEmailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleMailMessage.class);
 
     /**Method allows to send emails from the application.*/
-    public void send(final Mail mail) {
+    public void send(final Mail mail, final EmailCreator emailCreator) {
         LOGGER.info("Starting email preparation...");
         try {
-            javaMailSender.send(createMimeMessage(mail));
+            javaMailSender.send(createMimeMessage(mail, emailCreator));
             LOGGER.info("Email has been sent.");
         } catch (MailException e) {
             LOGGER.error("Failed to process email sending: " + e.getMessage(), e);
         }
     }
 
-    private MimeMessagePreparator createMimeMessage(final Mail mail) {
+    private MimeMessagePreparator createMimeMessage(final Mail mail, final EmailCreator emailCreator) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(mail.getMailTo());
             messageHelper.setSubject(mail.getSubject());
-            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+            messageHelper.setText(emailCreator.buildEmailMessage(mail.getMessage()), true);
         };
     }
 
