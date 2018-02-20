@@ -29,7 +29,7 @@ public class MailCreatorService implements EmailCreator {
         Context context = new Context();
         context.setVariable("preview", "New card has been created on your Trello account.");
         context.setVariable("message", message);
-        context.setVariable("tasks_url", "http://localhost:8888/tasks_frontend");
+        context.setVariable("tasks_url", "https://jkielczynska.github.io/");
         context.setVariable("button", "Visit website");
         context.setVariable("admin_name", adminConfig.getAdminName());
         context.setVariable("goodbye_message", "Have a nice day!");

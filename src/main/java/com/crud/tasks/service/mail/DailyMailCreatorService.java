@@ -25,7 +25,7 @@ public class DailyMailCreatorService implements EmailCreator {
         context.setVariable("preview", "Daily information about the number of tasks.");
         context.setVariable("task_count", taskRepository.count());
         context.setVariable("message", message);
-        context.setVariable("tasks_url", "http://localhost:8888/tasks_frontend");
+        context.setVariable("tasks_url", "https://jkielczynska.github.io/");
         context.setVariable("button", "Visit website");
         context.setVariable("goodbye_message", "Have a nice day!");
         context.setVariable("show_button", true);
