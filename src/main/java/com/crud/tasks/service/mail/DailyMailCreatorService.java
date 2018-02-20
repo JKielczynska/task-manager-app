@@ -19,8 +19,8 @@ public class DailyMailCreatorService implements EmailCreator {
     @Qualifier("templateEngine")
     private TemplateEngine templateEngine;
 
+    /**Thymeleaf context for storing and sharing variables directly into the template.*/
     public String buildEmailMessage(final String message) {
-
         Context context = new Context();
         context.setVariable("preview", "Daily information about the number of tasks.");
         context.setVariable("task_count", taskRepository.count());

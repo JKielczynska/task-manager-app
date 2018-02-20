@@ -19,8 +19,8 @@ public class MailCreatorService implements EmailCreator {
     @Qualifier("templateEngine")
     private TemplateEngine templateEngine;
 
-    public String buildEmailMessage(String message) {
-
+    /**Thymeleaf context for storing and sharing variables directly into the template.*/
+    public String buildEmailMessage(final String message) {
         List<String> functionality = new ArrayList<>();
         functionality.add("You can manage your tasks");
         functionality.add("Provides connection with Trello Account");
